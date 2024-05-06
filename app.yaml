@@ -1,0 +1,11 @@
+runtime: nodejs20
+
+env_variables:
+  MONGO_URI: 'mongodb+srv://nitik:nitik@cluster0.hpp9f1u.mongodb.net/crossmeet?retryWrites=true&w=majority'
+  JWT_KEY: 'abcdefghi'
+
+handlers:
+- url: /images
+  static_dir: static/images
+  http_headers:
+    Access-Control-Allow-Origin: '*'
