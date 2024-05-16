@@ -30,28 +30,38 @@ post_routes.get('/', async (req, res) => {
     .exec()
   res.json(posts)
 })
-// get all posts of a user
-post_routes.get('/:id', async (req, res) => {
-  const userId = req.params.id
-  const posts = await postModel
-    .find({ user: userId })
+
+// get a Post from postId
+post_routes.get('/:postId', async (req, res) => {
+  const postId = req.params.postId
+  const post = await postModel
+    .findOne({_id: postId})
     .populate({
       path: 'user',
       select: '-password',
     })
+    .exec()
+  res.json(post)
+})
+
+// get all posts of a user
+post_routes.get('/user/:id', async (req, res) => {
+  const userId = req.params.id
+  const posts = await postModel
+    .find({ user: userId })
     .exec()
   res.json(posts)
 })
 
 // add a post
 post_routes.post('/', authenticate, async (req, res) => {
-  const { title, description, imageUrl } = req.body
+  const { title, description, imageAddress } = req.body
   const { _id } = req.user
   try {
     const newPost = await new postModel({
       title,
       description,
-      imageUrl,
+      imageAddress,
       user: _id,
     }).save()
     res.json({ message: 'post created', post: newPost })

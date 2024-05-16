@@ -9,7 +9,7 @@ const postSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    imageUrl: {
+    imageAddress: {
       type: String,
       required: true,
     },

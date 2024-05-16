@@ -6,7 +6,7 @@ export const auth_routes = express()
 
 // signup
 auth_routes.post('/signup', async (req, res) => {
-  const { name, email, password } = req.body
+  const { name, email, password, imageAddress } = req.body
 
   if (!name || !email || !password) {
     return res.json({ message: 'add all the fields' })
@@ -15,7 +15,7 @@ auth_routes.post('/signup', async (req, res) => {
     const user = await userModel.findOne({ email }).exec()
     if (user === null) {
       const newPassword = await bcrypt.hash(password, 6)
-      const newUser = new userModel({ name, email, password: newPassword })
+      const newUser = new userModel({ name, email, password: newPassword, imageAddress })
       await newUser.save()
       res.json({ message: 'user created'})
     } else {
@@ -31,7 +31,7 @@ auth_routes.get('/signin/:email/:password', async (req, res) => {
   const { email, password } = req.params
   if (!email || !password) {
     return res.json({ message: 'add all the fields' })
-  }
+  } 
   try {
     const user = await userModel.findOne({ email }).exec()
     if (user !== null) {
@@ -40,9 +40,9 @@ auth_routes.get('/signin/:email/:password', async (req, res) => {
         user.password
       )
       if (isEmailAndPasswordMatch) {
-        const { _id, name, email } = user
-        const token = jwt.sign({ _id, name, email }, process.env.JWT_KEY)
-        res.json({ message: 'user verified', user: {_id, name, email, token} })
+        const { _id, name, email, followers, followings } = user
+        const token = jwt.sign({_id, name, email }, process.env.JWT_KEY)
+        res.json({ message: 'user verified', user: {_id, name, email, followers: followers.length, followings: followings.length, token} })
       } else {
         res.json({ message: 'wrong email or password' })
       }

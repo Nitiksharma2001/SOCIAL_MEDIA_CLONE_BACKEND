@@ -13,15 +13,22 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  // followers:[{
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'User',
-  //   required: true,
-  // }],
-  // followings:[{
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'User',
-  //   required: true,
-  // }]
+  imageAddress: {
+    type: String,
+  },
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: 0,
+    },
+  ],
+  followings: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: 0,
+    },
+  ],
 })
 export const userModel = mongoose.model('User', userSchema)
